@@ -1,0 +1,35 @@
+{
+  "name": "blog-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Osama3511/blog-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Osama3511/blog-api/issues"
+  },
+  "homepage": "https://github.com/Osama3511/blog-api#readme",
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "@quixo3/prisma-session-store": "^3.1.13",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "prisma": "^6.4.1"
+  }
+}
