@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -33,9 +33,10 @@ const SignUp = () => {
       if (response.ok) {
         setSuccessMessage("Sign-up successful!");
         setErrorMessage("");
-        navigate("/login");
+        setTimeout(() => navigate("/login"), 1000);
       } else {
         const result = await response.json();
+        console.log(result);
         setErrorMessage(result.error || "Something went wrong");
         setSuccessMessage("");
       }
@@ -78,6 +79,7 @@ const SignUp = () => {
 
       {successMessage && <div style={{ color: "green" }}>{successMessage}</div>}
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+      Already have an accout?<Link to="/login" >log in</Link>
     </div>
   );
 };

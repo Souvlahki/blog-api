@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -28,10 +28,13 @@ function Login() {
       });
 
       if (response.ok) {
-        navigate("/homepage");
+        const { user, token } = await response.json();
+        localStorage.setItem(token);
+        console.log(user, token);
+        navigate("/homepage", { state: { user } });
       } else {
         const result = await response.json();
-        console.log(result);
+        console.log(result.message);
       }
     } catch (error) {
       console.error("Error during submission:", error);
@@ -39,31 +42,34 @@ function Login() {
   };
 
   return (
-    <form action="/login" method="post" onSubmit={handleOnSubmit}>
-      <label htmlFor="username">
-        username
-        <input
-          type="text"
-          id="username"
-          name="username"
-          onChange={handleInputChange}
-          value={formData.username}
-          required
-        />
-      </label>
-      <label htmlFor="password">
-        password
-        <input
-          type="password"
-          id="password"
-          name="password"
-          onChange={handleInputChange}
-          value={formData.password}
-          required
-        />
-      </label>
-      <button>login</button>
-    </form>
+    <>
+      <form action="/login" method="post" onSubmit={handleOnSubmit}>
+        <label htmlFor="username">
+          username
+          <input
+            type="text"
+            id="username"
+            name="username"
+            onChange={handleInputChange}
+            value={formData.username}
+            required
+          />
+        </label>
+        <label htmlFor="password">
+          password
+          <input
+            type="password"
+            id="password"
+            name="password"
+            onChange={handleInputChange}
+            value={formData.password}
+            required
+          />
+        </label>
+        <button>login</button>
+      </form>
+      <div>Don't have an account? <Link to="/sign-up">sign-up!</Link></div>
+    </>
   );
 }
 
