@@ -2,9 +2,11 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const prisma = require("./prisma");
 const expressSession = require("express-session");
 
+const COOKIE_AGE =  10 * 1000;
+
 module.exports = expressSession({
   cookie: {
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: COOKIE_AGE,
   },
   secret: process.env.SESSION_SECRET,
   resave: false,

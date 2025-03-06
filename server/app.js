@@ -22,8 +22,9 @@ const routes = require("./routes/index");
 app.use("/sign-up", routes.signUpRouter);
 app.use("/login", routes.loginRouter);
 
-app.use("*", (err, req, res, next) => {
+app.use((err, req, res, next) => {
   console.log(err);
+  res.status(500).json(err);
 });
   
 app.listen(3000, () => {
