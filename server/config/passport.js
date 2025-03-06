@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 
 const verifyCallback = async (username, password, done) => {
   try {
-    const user = prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         username: username,
       },
@@ -35,7 +35,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         id: id,
       },

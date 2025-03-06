@@ -16,5 +16,4 @@ exports.signUpPost = async (req, res, next) => {
     console.log(err);
     next(err);
   }
-
 };

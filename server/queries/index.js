@@ -1,6 +1,5 @@
 const prisma = require("../config/prisma");
-
-// populate the db with some mock users
+// clear user db
 async function main() {
   await prisma.user.deleteMany();
 }
