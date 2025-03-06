@@ -1,7 +1,7 @@
 import { useState } from "react";
-
-// mock sign-up
-const App = () => {
+import { useNavigate } from "react-router-dom";
+const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -31,9 +31,9 @@ const App = () => {
       });
 
       if (response.ok) {
-        const result = await response.json();
         setSuccessMessage("Sign-up successful!");
         setErrorMessage("");
+        navigate("/login");
       } else {
         const result = await response.json();
         setErrorMessage(result.error || "Something went wrong");
@@ -57,6 +57,7 @@ const App = () => {
             name="username"
             value={formData.username}
             onChange={handleInputChange}
+            required
           />
         </label>
         <br />
@@ -68,6 +69,7 @@ const App = () => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
+            required
           />
         </label>
         <br />
@@ -80,4 +82,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default SignUp;
