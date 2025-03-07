@@ -1,0 +1,12 @@
+.success-msg {
+  color: #388e3c;
+  background-color: #e8f5e9;
+  border: 1px solid #388e3c;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 8px;
+  display: inline-block;
+}

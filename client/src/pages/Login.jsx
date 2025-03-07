@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../api/requests";
+import "../styles/Login.css";
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+  const [errMsg, setErrMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,34 +22,29 @@ function Login() {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    const response = await loginUser(formData);
 
-      if (response.ok) {
-        const { user, token } = await response.json();
-        localStorage.setItem(token);
-        console.log(user, token);
-        navigate("/homepage", { state: { user } });
-      } else {
-        const result = await response.json();
-        console.log(result.message);
-      }
-    } catch (error) {
-      console.error("Error during submission:", error);
+    if (response.error) {
+      setErrMsg(response.error);
+      return;
     }
+
+    const token = response.token;
+    localStorage.setItem("token", token);
+    setSuccessMsg("Logged in successfully redirecting to homepage");
+    setErrMsg("");
+    setTimeout(() => {
+      navigate("/homepage");
+    }, 1000);
   };
 
   return (
-    <>
-      <form action="/login" method="post" onSubmit={handleOnSubmit}>
-        <label htmlFor="username">
-          username
+    <div className="login-container">
+      <h1>Login</h1>
+      {errMsg ? <div className="error-msg"></div> : null}
+      <form onSubmit={handleOnSubmit}>
+        <label htmlFor="username" className="input-label">
+          Username
           <input
             type="text"
             id="username"
@@ -53,10 +52,12 @@ function Login() {
             onChange={handleInputChange}
             value={formData.username}
             required
+            className="input-field"
           />
         </label>
-        <label htmlFor="password">
-          password
+        <br />
+        <label htmlFor="password" className="input-label">
+          Password
           <input
             type="password"
             id="password"
@@ -64,12 +65,21 @@ function Login() {
             onChange={handleInputChange}
             value={formData.password}
             required
+            className="input-field"
           />
         </label>
-        <button>login</button>
+        <br />
+        <button type="submit" className="submit-btn">
+          Login
+        </button>
       </form>
-      <div>Don't have an account? <Link to="/sign-up">sign-up!</Link></div>
-    </>
+
+      {successMsg && <div className="success-msg">{successMsg}</div>}
+
+      <div className="signup-link">
+        Don't have an account? <Link to="/sign-up">Sign up!</Link>
+      </div>
+    </div>
   );
 }
 

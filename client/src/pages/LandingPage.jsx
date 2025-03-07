@@ -6,12 +6,16 @@ const LandingPage = () => {
   return (
     <div className="landing-container">
       <h1>Happening then</h1>
-      <h2>join today</h2>
-      <Link to="/sign-up">Create an account</Link>
+      <h2>Join today</h2>
+      <Link to="/sign-up" className="create-account-btn">
+        Create an account
+      </Link>
       <h3>Already a member?</h3>
-      <Link to="/login">Login!</Link>
+      <Link to="/login" className="login-link">
+        Login!
+      </Link>
     </div>
   );
-};  
+};
 
 export default LandingPage;

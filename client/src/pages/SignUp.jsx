@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { signInUser } from "../api/requests";
+import ErrorMsg from "../components/ErrorMsg";
+import SuccessMsg from "../components/SuccessMsg";
+import "../styles/SignUp.css";
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -7,8 +11,8 @@ const SignUp = () => {
     password: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [errors, setErrors] = useState([]);
+  const [successMsg, setSuccessMsg] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,37 +25,34 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/sign-up", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    const response = await signInUser(formData);
 
-      if (response.ok) {
-        setSuccessMessage("Sign-up successful!");
-        setErrorMessage("");
-        setTimeout(() => navigate("/login"), 1000);
-      } else {
-        const result = await response.json();
-        console.log(result);
-        setErrorMessage(result.error || "Something went wrong");
-        setSuccessMessage("");
-      }
-    } catch (error) {
-      console.error("Error during submission:", error);
-      setErrorMessage("Network error. Please try again later.");
-      setSuccessMessage("");
+    if (response.errors) {
+      setErrors(response.errors);
+      console.log(response.errors);
+      return;
     }
+
+    setSuccessMsg("signed in succsessfully redirecting to the login page...");
+    setErrors([]);
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
   };
 
   return (
-    <div>
+    <div className="signup-container">
+      <h1>Sign Up</h1>
+      {errors.length > 0 && (
+        <div className="error-msg">
+          {errors.map((err) => (
+            <p key={err.msg}>{err.msg}</p>
+          ))}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">
-          Username:
+        <label htmlFor="username" className="input-label">
+          Username
           <input
             type="text"
             id="username"
@@ -59,11 +60,12 @@ const SignUp = () => {
             value={formData.username}
             onChange={handleInputChange}
             required
+            className="input-field"
           />
         </label>
         <br />
-        <label htmlFor="password">
-          Password:
+        <label htmlFor="password" className="input-label">
+          Password
           <input
             type="password"
             id="password"
@@ -71,15 +73,18 @@ const SignUp = () => {
             value={formData.password}
             onChange={handleInputChange}
             required
+            className="input-field"
           />
         </label>
         <br />
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="submit-btn">
+          Sign Up
+        </button>
       </form>
 
-      {successMessage && <div style={{ color: "green" }}>{successMessage}</div>}
-      {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-      Already have an accout?<Link to="/login" >log in</Link>
+      <div className="login-link">
+        Already have an account? <Link to="/login">Login</Link>
+      </div>
     </div>
   );
 };
