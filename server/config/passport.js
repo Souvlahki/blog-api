@@ -1,48 +1,17 @@
+require("dotenv").config();
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const prisma = require("./prisma");
-const bcrypt = require("bcryptjs");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const verifyCallback = require("../lib/verifyUserCb");
+const { verifyJwt } = require("../lib/verifyJwtCb");
 
-const verifyCallback = async (username, password, done) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
-
-    if (!user) {
-      return done(null, false, { message: "Incorrect username" });
-    }
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return done(null, false, { message: "Incorrect password" });
-    }
-
-    return done(null, user);
-  } catch (err) {
-    return done(err);
-  }
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
 };
 
-const strategy = new LocalStrategy(verifyCallback);
-passport.use(strategy);
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
+const local = new LocalStrategy(verifyCallback);
+const jwt = new JwtStrategy(opts, verifyJwt);
+passport.use(local);
+passport.use(jwt);

@@ -7,23 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Session {
-  id        String   @id
-  sid       String   @unique
-  data      String   @db.Text
-  expiresAt DateTime
-}
-
 model Comment {
   id          Int       @id @default(autoincrement())
   publishedAt DateTime  @default(now())
   content     String
-  likeCount   Int
+  likeCount   Int       @default(0)
   authorId    Int
   postId      Int
   parentId    Int?
   post        Post      @relation(fields: [postId], references: [id])
-  author      User?     @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id])
   parent      Comment?  @relation("commentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies     Comment[] @relation("commentReplies")
 }
@@ -31,9 +24,10 @@ model Comment {
 model Post {
   id          Int       @id @default(autoincrement())
   publishedAt DateTime  @default(now())
+  published   Boolean
   title       String
   content     String
-  likeCount   Int
+  likeCount   Int       @default(0)
   authorId    Int
   comments    Comment[]
   author      User      @relation(fields: [authorId], references: [id])

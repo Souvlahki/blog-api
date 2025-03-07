@@ -7,28 +7,34 @@ exports.signUpPost = [
   validateUser,
   async (req, res, next) => {
     const errors = validationResult(req);
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        username: req.body.username,
-      },
-    });
-
-    if (existingUser) {
-      errors.errors.push({
-        type: "field",
-        value: `${req.body.username}`,
-        msg: "username already exists",
-        path: "username",
-      });
-    }
+    const errorsList = errors.array();
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
+      return res.json({
+        errors: errorsList,
       });
     }
 
     try {
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          username: req.body.username,
+        },
+      });
+
+      if (existingUser) {
+        errorsList.push({
+          type: "field",
+          value: `${req.body.username}`,
+          msg: "username already exists",
+          path: "username",
+        });
+
+        return res.json({
+          errors: errorsList,
+        });
+      }
+
       const hashedPwd = await bcrypt.hash(req.body.password, 10);
       await prisma.user.create({
         data: {
