@@ -12,13 +12,17 @@ exports.loginPost = (req, res, next) => {
       return res.json({ error: info.message });
     }
 
+    const payload = { id: user.id, username: user.username };
+
+    // assign the payload with userId and username generate the token after
     jwt.sign(
-      { user },
+      payload,
       process.env.JWT_SECRET,
-      { expiresIn: "2min" },
+      { expiresIn: "10min" },
       (err, token) => {
         res.status(201).json({
           token,
+          payload,
         });
       }
     );

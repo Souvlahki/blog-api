@@ -20,9 +20,7 @@ app.use("/login", routes.loginRouter);
 app.use("/posts", routes.postsRouter);
 
 app.use((err, req, res, next) => {
-  res.status(err.statusCode || 500).json({
-    err,
-  });
+  res.status(err.statusCode || 500).send(err.message);
 });
 
 app.listen(3000, () => {

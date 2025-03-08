@@ -1,89 +1,49 @@
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const prisma = require("../config/prisma");
 const CustomNotFoundError = require("../errors/CustomNotFoundError");
 const CustomNotAuthorizedError = require("../errors/CustomNotAuthorizedError");
 
+const getQueries = require("../queries/getQueries");
+
 // get all posts
 exports.postsGet = asyncHandler(async (req, res) => {
-  const posts = await prisma.post.findMany({
-    where: {
-      published: true,
-    },
-    include: {
-      posts: {
-        include: {
-          comments: {
-            include: {
-              replies: true,
-            },
-          },
-        },
-      },
-      author: true,
-    },
-  });
+  const posts = await getQueries.getPosts();
 
-  return res.json({
-    posts,
-  });
+  if (!posts) {
+    res.json(null);
+  }
+
+  return res.status(201).json({ posts });
 });
 
 // get a single post
 exports.singlePostGet = asyncHandler(async (req, res) => {
-  const post = await prisma.post.findUnique({
-    where: {
-      id: req.body.postId,
-    },
-    include: {
-      comments: {
-        include: {
-          replies: true,
-        },
-      },
-    },
-  });
+  const { postId } = req.params;
+
+  const post = await getQueries.getPost(postId);
 
   if (!post) {
     throw new CustomNotFoundError("Post not found");
   }
 
-  res.json({
+  res.status(201).json({
     post,
   });
 });
 
 // get all comments of a specific post
 exports.commentsGet = asyncHandler(async (req, res) => {
-  const comments = await prisma.comment.findMany({
-    where: {
-      postId: req.body.postId,
-    },
-    include: {
-      replies: true,
-    },
-  });
+  const { postId } = req.params;
 
-  res.json({
-    comments,
-  });
-});
+  const comments = await getQueries.getComments(postId);
 
-// get a single comment
-exports.singleCommentGet = asyncHandler(async (req, res) => {
-  const comment = await prisma.comment.findUnique({
-    where: {
-      id: req.params.commentId,
-    },
-  });
-
-  if (!comment) {
-    throw new CustomNotFoundError("comment not found");
+  if (!comments) {
+    res.json(null);
   }
 
   res.status(201).json({
-    comment,
+    comments,
   });
 });
 
@@ -98,7 +58,7 @@ exports.createPost = asyncHandler(async (req, res) => {
       content: req.body.content,
       title: req.body.title,
       published: req.body.published,
-      authoId: data.user.id,
+      authorId: req.user.id,
     },
   });
 
@@ -113,15 +73,19 @@ exports.createComment = asyncHandler(async (req, res) => {
     throw new CustomNotAuthorizedError("user not authorized");
   }
 
+  const { postId } = req.params;
+
   await prisma.comment.create({
     data: {
       content: req.body.content,
-      postId: req.body.postId,
+      postId: parseInt(postId),
       authorId: req.user.id,
     },
   });
 
-  res.status(201);
+  res.status(201).json({
+    message: "comment created",
+  });
 });
 
 // create reply
@@ -130,13 +94,18 @@ exports.createReply = asyncHandler(async (req, res) => {
     throw new CustomNotAuthorizedError("user not authorized");
   }
 
+  const { postId, commentId } = req.params;
+
   await prisma.comment.create({
     data: {
-      parentId: req.body.commentId,
+      postId: parseInt(postId),
+      parentId: parseInt(commentId),
       content: req.body.content,
       authorId: req.user.id,
     },
   });
 
-  res.status(201);
+  res.status(201).json({
+    message: "reply created",
+  });
 });

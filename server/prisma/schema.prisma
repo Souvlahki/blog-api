@@ -36,7 +36,7 @@ model Post {
 model User {
   id       Int       @id @default(autoincrement())
   username String    @unique
-  password String?
+  password String
   posts    Post[]
   comments Comment[]
 }
