@@ -1,12 +1,11 @@
-import LandingPage from "./pages/LandingPage";
 import SignUp from "./pages/SignUp";
-import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
-
+import Login from "./pages/login";
+import App from "./App";
 const routes = [
   {
     path: "/",
-    element: <LandingPage />,
+    element: <App />,
   },
   {
     path: "/sign-up",

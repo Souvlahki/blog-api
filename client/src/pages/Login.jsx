@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/authContext";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../api/requests";
 import "../styles/Login.css";
+// import verifyToken from "../api/auth";
+
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -10,6 +13,7 @@ function Login() {
   });
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const auth = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +27,6 @@ function Login() {
     e.preventDefault();
 
     const response = await loginUser(formData);
-
     if (response.error) {
       setErrMsg(response.error);
       return;
@@ -31,6 +34,10 @@ function Login() {
 
     const token = response.token;
     localStorage.setItem("token", token);
+
+    // const user = verifyToken();
+
+    // auth.login(user);
     setSuccessMsg("Logged in successfully redirecting to homepage");
     setErrMsg("");
     setTimeout(() => {

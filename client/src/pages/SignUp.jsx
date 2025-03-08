@@ -4,6 +4,7 @@ import { signInUser } from "../api/requests";
 import ErrorMsg from "../components/ErrorMsg";
 import SuccessMsg from "../components/SuccessMsg";
 import "../styles/SignUp.css";
+
 const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const SignUp = () => {
       {errors.length > 0 && (
         <div className="error-msg">
           {errors.map((err) => (
-            <p key={err.msg}>{err.msg}</p>
+            <ErrorMsg key={err.msg}>{err.msg}</ErrorMsg>
           ))}
         </div>
       )}

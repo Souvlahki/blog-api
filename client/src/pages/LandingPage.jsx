@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/LandingPage.css";
 
-const LandingPage = () => {
+function LandingPage() {
   return (
     <div className="landing-container">
       <h1>Happening then</h1>
@@ -16,6 +16,6 @@ const LandingPage = () => {
       </Link>
     </div>
   );
-};
+}
 
 export default LandingPage;
