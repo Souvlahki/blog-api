@@ -1,3 +1,18 @@
+import { jwtDecode } from "jwt-decode";
+
+const isExpired = (token) => {
+  if (!token) {
+    return true;
+  }
+
+  try {
+    const { exp } = jwtDecode(token);
+    return Date.now() >= exp * 1000;
+  } catch {
+    return true;
+  }
+};
+
 export async function loginUser(data) {
   try {
     const response = await fetch("http://localhost:3000/login", {

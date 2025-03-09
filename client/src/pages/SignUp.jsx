@@ -82,7 +82,7 @@ const SignUp = () => {
           Sign Up
         </button>
       </form>
-
+      {successMsg && <SuccessMsg msg={successMsg} />}
       <div className="login-link">
         Already have an account? <Link to="/login">Login</Link>
       </div>

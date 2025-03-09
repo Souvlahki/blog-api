@@ -1,11 +1,13 @@
 import SignUp from "./pages/SignUp";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/login";
-import App from "./App";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LandingPage from "./pages/LandingPage";
+
 const routes = [
   {
     path: "/",
-    element: <App />,
+    element: <LandingPage />,
   },
   {
     path: "/sign-up",
@@ -17,7 +19,11 @@ const routes = [
   },
   {
     path: "/homepage",
-    element: <Homepage />,
+    element: (
+      <ProtectedRoute>
+        <Homepage></Homepage>
+      </ProtectedRoute>
+    ),
   },
 ];
 

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Homepage() {
   return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/authContext";
+import { useAuth } from "../contexts/AuthProvider";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../api/requests";
 import "../styles/Login.css";
@@ -13,7 +13,8 @@ function Login() {
   });
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const auth = useAuth();
+
+  const { login } = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +34,7 @@ function Login() {
     }
 
     const token = response.token;
-    localStorage.setItem("token", token);
-
-    // const user = verifyToken();
-
-    // auth.login(user);
+    login(token);
     setSuccessMsg("Logged in successfully redirecting to homepage");
     setErrMsg("");
     setTimeout(() => {
