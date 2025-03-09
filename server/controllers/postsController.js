@@ -109,3 +109,109 @@ exports.createReply = asyncHandler(async (req, res) => {
     message: "reply created",
   });
 });
+
+// edit post content
+exports.editPost = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new CustomNotAuthorizedError("user not authorized");
+  }
+
+  const { postId } = req.params;
+  const data = req.body;
+
+  await prisma.post.update({
+    where: {
+      id: parseInt(postId),
+    },
+    data: data,
+  });
+
+  res.status(201).json({ message: "edit successful" });
+});
+
+// edit comment
+exports.editComment = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new CustomNotAuthorizedError("user not authorized");
+  }
+
+  const { postId, commentId } = req.params;
+  const data = req.body;
+
+  await prisma.comment.update({
+    where: {
+      id: parseInt(commentId),
+      postId: parseInt(postId),
+    },
+    data: data,
+  });
+
+  res.status(201).json({ message: "edit successful" });
+});
+
+exports.editReply = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new CustomNotAuthorizedError("user not authorized");
+  }
+
+  const { replyId } = req.params;
+  const data = req.body;
+
+  await prisma.comment.update({
+    where: {
+      id: parseInt(replyId),
+    },
+
+    data: data,
+  });
+
+  res.status(201).json({ message: "edit successful" });
+});
+
+exports.deletePost = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new CustomNotAuthorizedError("user not authorized");
+  }
+
+  const { postId } = req.params;
+
+  await prisma.post.delete({
+    where: {
+      id: parseInt(postId),
+    },
+  });
+
+  res.status(201).json({ message: "deletion successful" });
+});
+
+exports.deleteComment = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new CustomNotAuthorizedError("user not authorized");
+  }
+
+  const { commentId } = req.params;
+
+  await prisma.comment.delete({
+    where: {
+      id: parseInt(commentId),
+    },
+  });
+
+  res.status(201).json({ message: "deletion successful" });
+});
+
+exports.deleteReply = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new CustomNotAuthorizedError("user not authorized");
+  }
+
+  const { replyId } = req.params;
+
+  await prisma.comment.delete({
+    where: {
+      id: parseInt(replyId),
+    },
+  });
+
+  res.status(201).json({ message: "deletion successful" });
+});

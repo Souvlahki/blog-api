@@ -15,8 +15,8 @@ model Comment {
   authorId    Int
   postId      Int
   parentId    Int?
-  post        Post      @relation(fields: [postId], references: [id])
-  author      User      @relation(fields: [authorId], references: [id])
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parent      Comment?  @relation("commentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies     Comment[] @relation("commentReplies")
 }
@@ -30,7 +30,7 @@ model Post {
   likeCount   Int       @default(0)
   authorId    Int
   comments    Comment[]
-  author      User      @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model User {

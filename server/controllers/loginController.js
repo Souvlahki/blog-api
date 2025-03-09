@@ -18,11 +18,10 @@ exports.loginPost = (req, res, next) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: "10min" },
+      { expiresIn: "7d" },
       (err, token) => {
         res.status(201).json({
           token,
-          payload,
         });
       }
     );

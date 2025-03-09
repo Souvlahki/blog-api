@@ -31,28 +31,41 @@ postsRouter.post(
   postsController.createReply
 );
 
-postsRouter.put("/:postId", passport.authenticate("jwt", { session: false }));
 postsRouter.put(
-  "/comments/:commentId",
-  passport.authenticate("jwt", { session: false })
+  "/:postId",
+  passport.authenticate("jwt", { session: false }),
+  postsController.editPost
 );
+
 postsRouter.put(
-  "/comments/:commentId/replies",
-  passport.authenticate("jwt", { session: false })
+  "/:postId/comments/:commentId",
+  passport.authenticate("jwt", { session: false }),
+  postsController.editComment
+);
+
+postsRouter.put(
+  "/:postId/comments/:commentId/replies/:replyId",
+  passport.authenticate("jwt", { session: false }),
+  postsController.editReply
 );
 
 // handle delete requests
 postsRouter.delete(
   "/:postId",
-  passport.authenticate("jwt", { session: false })
+  passport.authenticate("jwt", { session: false }),
+  postsController.deletePost
 );
+
 postsRouter.delete(
-  "/comments/:commentId",
-  passport.authenticate("jwt", { session: false })
+  "/:postId/comments/:commentId",
+  passport.authenticate("jwt", { session: false }),
+  postsController.deleteComment
 );
+
 postsRouter.delete(
-  "/comments/:commentId/replies",
-  passport.authenticate("jwt", { session: false })
+  "/:postId/comments/:commentId/replies/:replyId",
+  passport.authenticate("jwt", { session: false }),
+  postsController.deleteReply
 );
 
 module.exports = postsRouter;
