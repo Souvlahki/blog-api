@@ -8,7 +8,7 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (!token) {
-      navigate("/login", { replace: true });
+      navigate("/landing-page", { replace: true });
     }
   }, [token, navigate]);
 

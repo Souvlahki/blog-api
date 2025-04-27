@@ -3,7 +3,6 @@ import { useAuth } from "../contexts/AuthProvider";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../api/requests";
 import "../styles/Login.css";
-// import verifyToken from "../api/auth";
 
 function Login() {
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ function Login() {
     setSuccessMsg("Logged in successfully redirecting to homepage");
     setErrMsg("");
     setTimeout(() => {
-      navigate("/homepage");
+      navigate("/");
     }, 1000);
   };
 

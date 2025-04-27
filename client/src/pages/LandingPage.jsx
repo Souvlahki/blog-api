@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/LandingPage.css";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthProvider";
-
+import Header from "../components/Header";
 function LandingPage() {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -17,15 +17,14 @@ function LandingPage() {
   return (
     !token && (
       <div className="landing-container">
-        <h1>Happening then</h1>
-        <h2>Join today</h2>
-        <Link to="/sign-up" className="create-account-btn">
-          Create an account
-        </Link>
-        <h3>Already a member?</h3>
-        <Link to="/login" className="login-link">
-          Login!
-        </Link>
+        <Header />
+        <hr />
+        <main>
+          <h2>
+            Write yours starting now on <span>Elven!</span>
+          </h2>
+          <Link to="/sign-up">join today</Link>
+        </main>
       </div>
     )
   );
