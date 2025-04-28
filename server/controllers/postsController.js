@@ -6,7 +6,7 @@ const CustomNotAuthorizedError = require("../errors/CustomNotAuthorizedError");
 
 const getQueries = require("../queries/getQueries");
 
-// get all posts
+// get all published posts
 exports.postsGet = asyncHandler(async (req, res) => {
   const posts = await getQueries.getPosts();
 

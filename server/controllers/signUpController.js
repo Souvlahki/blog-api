@@ -10,8 +10,15 @@ exports.signUpPost = [
     const errorsList = errors.array();
 
     if (!errors.isEmpty()) {
+      const filteredErrors = [];
+      errorsList.forEach((error) => {
+        filteredErrors.push({
+          msg: error.msg,
+          path: error.path,
+        });
+      });
       return res.json({
-        errors: errorsList,
+        errors: filteredErrors,
       });
     }
 
@@ -24,8 +31,6 @@ exports.signUpPost = [
 
       if (existingUser) {
         errorsList.push({
-          type: "field",
-          value: `${req.body.username}`,
           msg: "username already exists",
           path: "username",
         });

@@ -9,7 +9,7 @@ exports.loginPost = (req, res, next) => {
     }
 
     if (!user) {
-      return res.json({ error: info.message });
+      return res.json({ error: "Incorrect username or password" });
     }
 
     const payload = { id: user.id, username: user.username };
