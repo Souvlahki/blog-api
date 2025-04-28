@@ -43,44 +43,43 @@ function Login() {
 
   return (
     <div className="login-container">
-      <h1>Login</h1>
-      {errMsg ? <div className="error-msg"></div> : null}
-      <form onSubmit={handleOnSubmit}>
+      <h1 className="login-heading">Login</h1>
+      <form onSubmit={handleOnSubmit} className="login-form">
+        {errMsg && <div className="error-msg">{errMsg}</div>}
         <label htmlFor="username" className="input-label">
           Username
           <input
             type="text"
             id="username"
             name="username"
-            onChange={handleInputChange}
             value={formData.username}
+            onChange={handleInputChange}
             required
             className="input-field"
           />
         </label>
-        <br />
         <label htmlFor="password" className="input-label">
           Password
           <input
             type="password"
             id="password"
             name="password"
-            onChange={handleInputChange}
             value={formData.password}
+            onChange={handleInputChange}
             required
             className="input-field"
           />
         </label>
-        <br />
         <button type="submit" className="submit-btn">
           Login
         </button>
       </form>
-
       {successMsg && <div className="success-msg">{successMsg}</div>}
-
       <div className="signup-link">
-        Don't have an account? <Link to="/sign-up">Sign up!</Link>
+        Don't have an account?{" "}
+        <Link to="/sign-up" className="signup-link-anchor">
+          Sign up!
+        </Link>
       </div>
     </div>
   );

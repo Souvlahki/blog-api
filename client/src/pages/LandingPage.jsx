@@ -18,12 +18,14 @@ function LandingPage() {
     !token && (
       <div className="landing-container">
         <Header />
-        <hr />
-        <main>
-          <h2>
+        <hr className="landing-divider" />
+        <main className="landing-main">
+          <h2 className="landing-heading">
             Write yours starting now on <span>Elven!</span>
           </h2>
-          <Link to="/sign-up">join today</Link>
+          <Link to="/sign-up" className="landing-join-link">
+            Join Today
+          </Link>
         </main>
       </div>
     )

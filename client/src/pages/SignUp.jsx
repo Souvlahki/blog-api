@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInUser } from "../api/requests";
-import ErrorMsg from "../components/ErrorMsg";
-import SuccessMsg from "../components/SuccessMsg";
 import "../styles/SignUp.css";
 
 const SignUp = () => {
@@ -30,7 +28,6 @@ const SignUp = () => {
 
     if (response.errors) {
       setErrors(response.errors);
-      console.log(response.errors);
       return;
     }
 
@@ -41,17 +38,13 @@ const SignUp = () => {
     }, 1000);
   };
 
+  const getFieldErrors = (field) =>
+    errors.filter((error) => error.path === field);
+
   return (
     <div className="signup-container">
-      <h1>Sign Up</h1>
-      {errors.length > 0 && (
-        <div className="error-msg">
-          {errors.map((err) => (
-            <ErrorMsg key={err.msg}>{err.msg}</ErrorMsg>
-          ))}
-        </div>
-      )}
-      <form onSubmit={handleSubmit}>
+      <h1 className="signup-heading">Sign Up</h1>
+      <form onSubmit={handleSubmit} className="signup-form">
         <label htmlFor="username" className="input-label">
           Username
           <input
@@ -61,10 +54,15 @@ const SignUp = () => {
             value={formData.username}
             onChange={handleInputChange}
             required
+            placeholder="8-20 characters (e.g. Souvlahki)"
             className="input-field"
           />
         </label>
-        <br />
+        {getFieldErrors("username").map((error) => (
+          <div key={error.msg} className="error-msg">
+            {error.msg}
+          </div>
+        ))}
         <label htmlFor="password" className="input-label">
           Password
           <input
@@ -74,17 +72,25 @@ const SignUp = () => {
             value={formData.password}
             onChange={handleInputChange}
             required
+            placeholder="10-20 characters"
             className="input-field"
           />
         </label>
-        <br />
+        {getFieldErrors("password").map((error) => (
+          <div key={error.msg} className="error-msg">
+            {error.msg}
+          </div>
+        ))}
         <button type="submit" className="submit-btn">
           Sign Up
         </button>
       </form>
-      {successMsg && <SuccessMsg msg={successMsg} />}
+      {successMsg && <div className="success-msg">{successMsg}</div>}
       <div className="login-link">
-        Already have an account? <Link to="/login">Login</Link>
+        Already have an account?{" "}
+        <Link to="/login" className="login-link-anchor">
+          Login
+        </Link>
       </div>
     </div>
   );
